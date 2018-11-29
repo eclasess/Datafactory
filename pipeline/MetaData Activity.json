@@ -1,0 +1,85 @@
+{
+	"name": "MetaData Activity",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "AzureBlob1",
+						"type": "DatasetReference",
+						"parameters": {
+							"file": "emp"
+						}
+					},
+					"fieldList": [
+						"lastModified",
+						"itemName",
+						"size"
+					]
+				}
+			},
+			{
+				"name": "Stored Procedure1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[filesizelastmodify]",
+					"storedProcedureParameters": {
+						"itemtype": {
+							"value": {
+								"value": "@activity('Get Metadata1').output.ItemName",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"lastmodifieddate": {
+							"value": {
+								"value": "@activity('Get Metadata1').output.Lastmodified",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"size": {
+							"value": {
+								"value": "@activity('Get Metadata1').output.Size",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [
+			"Metadatattata"
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

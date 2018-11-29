@@ -1,0 +1,14 @@
+{
+	"name": "trigger1",
+	"properties": {
+		"runtimeState": "Stopped",
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/eclasessblob/",
+			"scope": "/subscriptions/2b340763-0d28-4ce2-afdb-5689d9d5c0a7/resourceGroups/eclasess/providers/Microsoft.Storage/storageAccounts/eclasessstorageaccount",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
